@@ -1,6 +1,9 @@
 package aei_database;
 
 import java.sql.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class DatabaseConnector {
 	/**
@@ -13,7 +16,9 @@ public class DatabaseConnector {
 	
 	public String userName, pass;
 	
+	//test variables for userID and idSchedule
 	int userID = 1;
+	int idSched = 1;
 	
 	Connection conn = null;
 	/**
@@ -65,8 +70,35 @@ public class DatabaseConnector {
 			System.out.println("Connection not found");
 		}
 	}
+	/**
+	 * A method to serialize a schedule object to prepare for storage in the database.
+	 * Note: class will produce errors until Schedule class is implemented and the class implements the serialize interface
+	 * @param sch The schedule object to be serialized
+	 * @param schName The name of the schedule(a day between sunday and saturday)
+	 */
+	public void serialize(Schedule sch, String schName) {
+		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newBufferedReader(Paths.get(schName)))){
+			oos.writeObject(sch);
+		}
+	}
 	
+	/**
+	 * A method that stores a schedule object into the schedule table in the database
+	 * Note: Will continue to produce errors until schedule class is implemented
+	 * @param userID The id of the user the schedule is connected to
+	 * @param schedID The id of the schedule 
+	 * @param fileName the file with the serialized object
+	 */
 	
+	public void storeSchedule(int userID, int schedID, File fileName) {
+		String insertSQL = "INSERT into schedule(idschedules, userID, schedule)" + "values (" + schedID++ + ", " + userID + ", " + fileName;
+		try {
+			Statement st = conn.createStatement();
+			st.executeQuery(insertSQL);
+		}catch(Exception e) {
+			System.out.println("Connection not found");
+		}
+	}
 	
 
 	
