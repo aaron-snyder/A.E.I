@@ -15,6 +15,9 @@ import javax.swing.JScrollPane;
 
 public class HomePage {
 
+	/*
+	 * global variables that are used
+	 */
 	private JFrame frmHomePage;
     private JList<String> taskList;
 
@@ -29,6 +32,9 @@ public class HomePage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		/*
+		 * creating the main frame 
+		 */
 		frmHomePage = new JFrame();
 		frmHomePage.getContentPane().setBackground(new Color(192, 192, 192));
 		frmHomePage.setBackground(new Color(192, 192, 192));
@@ -37,6 +43,9 @@ public class HomePage {
 		frmHomePage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHomePage.getContentPane().setLayout(null);
 		
+		/*
+		 * creating the label that shows the date
+		 */
 		JLabel lblLogin = new JLabel("Date");
 		lblLogin.setBounds(29, 10, 105, 35);
 		lblLogin.setForeground(new Color(0, 0, 0));
@@ -48,13 +57,20 @@ public class HomePage {
 	
 		
 
+		/*
+		 * creating a scroll pane that show the tasks for the day
+		 */
         JScrollPane tasksPanel = new JScrollPane(taskList);
         tasksPanel.setBounds(10, 55, 192, 205);
 		frmHomePage.getContentPane().add(tasksPanel);
 		tasksPanel.setViewportView(taskList);
 
 ;
-		
+		/*
+		 * creating the add task button.
+		 * the add task button takes the user to the create task panel
+		 * where the user will be able to create and add a new task
+		 */
 		JButton btnAddTask = new JButton("Add task");
 		btnAddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -64,10 +80,13 @@ public class HomePage {
                 frmHomePage.dispose();
 			}
 		});
-		
 		btnAddTask.setBounds(270, 55, 117, 21);
 		frmHomePage.getContentPane().add(btnAddTask);
 		
+		/*
+		 * creating the save button
+		 * the save button will save the task list to the database
+		 */
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -80,6 +99,11 @@ public class HomePage {
 		btnSave.setBounds(270, 100, 117, 21);
 		frmHomePage.getContentPane().add(btnSave);
 		
+		/*
+		 * creating the logout button
+		 * the logout button will log the user out of
+		 * their account and take them to the login page
+		 */
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -97,6 +121,9 @@ public class HomePage {
 
 	}
 	 
+	/*
+	 * sets the homepage visibility to show the page
+	 */
     public void setVisible(boolean visible) {
     	frmHomePage.setVisible(visible);
     }

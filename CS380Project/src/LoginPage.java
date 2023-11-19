@@ -13,6 +13,9 @@ import java.awt.Panel;
 
 public class LoginPage {
 
+	/*
+	 * global variables that are used
+	 */
 	private JFrame frmLoginPage;
 	private JPasswordField passwordField;
 	private JTextField UserNameField;
@@ -31,6 +34,9 @@ public class LoginPage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		/*
+		 * creating the main frame for the Login page
+		 */
 		frmLoginPage = new JFrame();
 		frmLoginPage.getContentPane().setBackground(new Color(192, 192, 192));
 		frmLoginPage.setBackground(new Color(192, 192, 192));
@@ -39,21 +45,31 @@ public class LoginPage {
 		frmLoginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginPage.getContentPane().setLayout(null);
 		
+		/*
+		 * creating the password field for the login frame
+		 */
 		passwordField = new JPasswordField();
 		passwordField.setBounds(182, 139, 130, 20);
 		frmLoginPage.getContentPane().add(passwordField);
 		
+		/*
+		 * creating the username field for the login frame
+		 */
 		UserNameField = new JTextField();
 		UserNameField.setBounds(182, 88, 130, 20);
 		frmLoginPage.getContentPane().add(UserNameField);
 		UserNameField.setColumns(10);
 		
+
 		Panel panel = new Panel();
 		panel.setBackground(new Color(128, 128, 128));
 		panel.setBounds(347, 0, 89, 263);
 		frmLoginPage.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		/*
+		 * creating the labels on the Login Page panel
+		 */
 		JLabel lblAei = new JLabel("A.E.I");
 		lblAei.setBounds(10, 22, 60, 20);
 		lblAei.setHorizontalAlignment(SwingConstants.CENTER);
@@ -88,7 +104,7 @@ public class LoginPage {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-                // Open CreateAccountFrame
+                // Open HomePageFrame
                 HomePage HomePageFrame = new HomePage();
                 HomePageFrame.setVisible(true);
                 frmLoginPage.dispose();
@@ -116,6 +132,9 @@ public class LoginPage {
 		
 	}
 	
+	/*
+	 * method to make set the visibility of the LoginPage panel
+	 */
     public void setVisible(boolean visible) {
     	frmLoginPage.setVisible(visible);
     }

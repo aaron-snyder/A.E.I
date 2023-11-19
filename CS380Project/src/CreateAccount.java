@@ -14,6 +14,7 @@ import java.awt.Panel;
 
 public class CreateAccount {
 
+	// global varibles for the create account page
 	private JFrame frmCreateAccount;
 	private JPasswordField passwordConfirmField;
 	private JTextField UserNameField;
@@ -31,6 +32,9 @@ public class CreateAccount {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		/*
+		 * creating the main frame for the create account page
+		 */
 		frmCreateAccount = new JFrame();
 		frmCreateAccount.getContentPane().setBackground(new Color(192, 192, 192));
 		frmCreateAccount.setBackground(new Color(192, 192, 192));
@@ -39,9 +43,16 @@ public class CreateAccount {
 		frmCreateAccount.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCreateAccount.getContentPane().setLayout(null);
 		
+		/*
+		 * creating the password and username fields
+		 */
 		passwordConfirmField = new JPasswordField();
 		passwordConfirmField.setBounds(182, 159, 130, 20);
 		frmCreateAccount.getContentPane().add(passwordConfirmField);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(182, 129, 130, 20);
+		frmCreateAccount.getContentPane().add(passwordField);
 		
 		UserNameField = new JTextField();
 		UserNameField.setBounds(182, 88, 130, 20);
@@ -54,12 +65,18 @@ public class CreateAccount {
 		frmCreateAccount.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		/*
+		 * creating lable to show team name
+		 */
 		JLabel lblAei = new JLabel("A.E.I");
 		lblAei.setBounds(10, 22, 60, 20);
 		lblAei.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAei.setFont(new Font("Tempus Sans ITC", Font.BOLD, 14));
 		panel.add(lblAei);
 		
+		/*
+		 * creating labels
+		 */
 		JLabel lblCreateAccount = new JLabel("Create Account");
 		lblCreateAccount.setForeground(new Color(0, 0, 0));
 		lblCreateAccount.setBackground(new Color(192, 192, 192));
@@ -80,37 +97,39 @@ public class CreateAccount {
 		lblPassword.setBounds(63, 133, 109, 16);
 		frmCreateAccount.getContentPane().add(lblPassword);
 		
-		/*
-		 * Sign up button to send user to a sign up page.
-		 * The user will be taken to the "sign up" panel
-		 */
-		JButton createAccountBtn = new JButton("Create Account");
-		createAccountBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			    // Open CreateAccountFrame
-                LoginPage LoginPageFrame = new LoginPage();
-                LoginPageFrame.setVisible(true);
-                frmCreateAccount.dispose();
-                System.out.println("Account Created");
-			}
-		});
-		createAccountBtn.setBounds(122, 205, 130, 25);
-		frmCreateAccount.getContentPane().add(createAccountBtn);
-		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
 		lblConfirmPassword.setHorizontalAlignment(SwingConstants.LEFT);
 		lblConfirmPassword.setFont(new Font("Yu Gothic Medium", Font.PLAIN, 12));
 		lblConfirmPassword.setBounds(56, 163, 116, 16);
 		frmCreateAccount.getContentPane().add(lblConfirmPassword);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(182, 129, 130, 20);
-		frmCreateAccount.getContentPane().add(passwordField);
+		/*
+		 * Sign up button to create the users account
+		 * this button should also check the user info and
+		 * make sure that there isnt already a user with the username
+		 * 
+		 * This also takes the user back to the login page
+		 */
+		JButton createAccountBtn = new JButton("Create Account");
+		createAccountBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			    // Opens teh login page frame
+                LoginPage LoginPageFrame = new LoginPage();
+                LoginPageFrame.setVisible(true);
+                frmCreateAccount.dispose();
+                //prints that the account was created
+                System.out.println("Account Created");
+			}
+		});
+		createAccountBtn.setBounds(122, 205, 130, 25);
+		frmCreateAccount.getContentPane().add(createAccountBtn);
 		
-
 	}
 	
+	/*
+	 * sets the visiblity of the createAccount page
+	 */
     public void setVisible(boolean visible) {
         frmCreateAccount.setVisible(visible);
     }
