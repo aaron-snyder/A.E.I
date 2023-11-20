@@ -15,7 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 
-public class CreateTask extends Page {
+public class CreateTask {
 
 	/*
 	 * creating global variables
@@ -26,8 +26,8 @@ public class CreateTask extends Page {
     private JList<String> taskList;
     
     // variabels that will hold the different hours and mins that the user can check
-	private JComboBox<String> hourBox = new JComboBox<>();
-	private JComboBox<String> minBox = new JComboBox<String>();
+	private JComboBox<String> hourBoxStart = new JComboBox<>();
+	private JComboBox<String> minBoxEnd = new JComboBox<String>();
 	
 	// variables for the am and pm check boxes
 	private JCheckBox chckbxAm = new JCheckBox("AM");
@@ -41,6 +41,10 @@ public class CreateTask extends Page {
 	private JCheckBox chckbxThur = new JCheckBox("Thur");
 	private JCheckBox chckbxFri = new JCheckBox("Fri");
 	private JCheckBox chckbxSat = new JCheckBox("Sat");
+	private final JComboBox<String> hourBoxEnd = new JComboBox<String>();
+	private final JComboBox<String> minBoxStart = new JComboBox<String>();
+	private final JLabel lblStart = new JLabel("Start:");
+	private final JLabel lblEnd = new JLabel("End:");
 	
 
 
@@ -140,18 +144,18 @@ public class CreateTask extends Page {
 		frmCreateTask.getContentPane().add(chckbxSat);
 		
 		
-		chckbxAm.setBounds(208, 157, 51, 21);
+		chckbxAm.setBounds(208, 190, 51, 21);
 		frmCreateTask.getContentPane().add(chckbxAm);
 		
-		chckbxPm.setBounds(208, 180, 51, 21);
+		chckbxPm.setBounds(208, 213, 51, 21);
 		frmCreateTask.getContentPane().add(chckbxPm);
 		
 		/*
 		 * creating a label for "Time:"
 		 */
-		JLabel lblTime = new JLabel("Time:");
+		JLabel lblTime = new JLabel("Time");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblTime.setBounds(212, 125, 51, 20);
+		lblTime.setBounds(212, 106, 51, 20);
 		frmCreateTask.getContentPane().add(lblTime);
 		
 
@@ -164,13 +168,14 @@ public class CreateTask extends Page {
 		/*
 		 * adds the different hours the user can chose to the check box
 		 */
-		hourBox.setMaximumRowCount(12);
-		hourBox.setBounds(265, 127, 51, 21);
-		frmCreateTask.getContentPane().add(hourBox);
+		hourBoxStart.setMaximumRowCount(12);
+		hourBoxStart.setBounds(265, 127, 51, 21);
+		frmCreateTask.getContentPane().add(hourBoxStart);
 		
 		// Populate the hourBox with hours from 1 to 12
 		for (int i = 0; i <= 11; i++) {
-		    hourBox.addItem(hour[i]);
+		    hourBoxStart.addItem(hour[i]);
+		    hourBoxEnd.addItem(hour[i]);
 		}
 		
 		/*
@@ -183,13 +188,14 @@ public class CreateTask extends Page {
 		/*
 		 * adds the different mins the user can choose to the check box
 		 */
-		minBox.setMaximumRowCount(3);
-		minBox.setBounds(326, 127, 51, 21);
-		frmCreateTask.getContentPane().add(minBox);
+		minBoxEnd.setMaximumRowCount(3);
+		minBoxEnd.setBounds(326, 157, 51, 21);
+		frmCreateTask.getContentPane().add(minBoxEnd);
 		
 		// Populate the hourBox with hours from 1 to 12
 		for (int i = 0; i <= 3; i++) {
-		    minBox.addItem(min[i]);
+			minBoxStart.addItem(min[i]);
+		    minBoxEnd.addItem(min[i]);
 		}
 		
 
@@ -215,6 +221,22 @@ public class CreateTask extends Page {
 		JButton btnBack = new JButton("Back");
 		btnBack.setBounds(351, 230, 70, 20);
 		frmCreateTask.getContentPane().add(btnBack);
+		hourBoxEnd.setMaximumRowCount(12);
+		hourBoxEnd.setBounds(265, 157, 51, 21);
+		
+		frmCreateTask.getContentPane().add(hourBoxEnd);
+		minBoxStart.setMaximumRowCount(12);
+		minBoxStart.setBounds(326, 127, 51, 21);
+		
+		frmCreateTask.getContentPane().add(minBoxStart);
+		lblStart.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblStart.setBounds(212, 131, 51, 20);
+		
+		frmCreateTask.getContentPane().add(lblStart);
+		lblEnd.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblEnd.setBounds(212, 158, 51, 20);
+		
+		frmCreateTask.getContentPane().add(lblEnd);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -240,16 +262,22 @@ public class CreateTask extends Page {
             String selectedDay = getSelectedDay();
             
             // Get selected hour
-            String selectedHour = (String) hourBox.getSelectedItem();
+            String selectedHourStart = (String) hourBoxStart.getSelectedItem();
             
             // Get selected min
-            String selectedMin = (String) minBox.getSelectedItem();
+            String selectedMinStart = (String) minBoxStart.getSelectedItem();
+            
+            // Get selected hour
+            String selectedHourEnd = (String) hourBoxEnd.getSelectedItem();
+            
+            // Get selected min
+            String selectedMinEnd = (String) minBoxEnd.getSelectedItem();
             
             // Get selected AM/PM
             String selectedAmPm = getSelectedAmPm();
             
             // Construct the task string
-            String taskString = taskText + " - " + selectedDay + ", " + selectedHour + ":" + selectedMin + " " + selectedAmPm;
+            String taskString = taskText + " - " + selectedDay + ", " + selectedHourStart + ":" + selectedMinStart + " " + selectedAmPm + " " + selectedHourEnd + ", " + selectedMinEnd;
 
             // Add the task to the list
             taskListModel.addElement(taskString);
