@@ -40,9 +40,6 @@ public class Listeners {
 
                 // Switch to catch which button was pressed and perform appropriate functions.
                 switch (action) {
-                    case "Calendar":
-                        displayCalendar();
-                        break;
 
                     case "Add Task":
                         displayAddTaskPage();
@@ -54,46 +51,9 @@ public class Listeners {
             }
         };
 
-        /**
-         * Listener for login page.
-         */
-        ActionListener loginPage = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        
 
-                // Obtain button pressed in form of string.
-                String action = e.getActionCommand();
-
-                // Switch to catch which button was pressed and perform appropriate functions.
-                switch  (action) {
-                    case "Create Account":
-                        openCreateAccountPage();
-                        break;
-                    case "Login":
-                        if (checkLoginCredentials()) {
-                            openHomePage(database.user());
-                        } else {
-                            displayLoginErrorMessage();
-                        }
-                }
-            }
-        };
-
-        /**
-         * Listener for signup page.
-         */
-        ActionListener signupPage = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                // Only action to perform is Create Account button, so attempt to create account.
-                if (checkNewAccount(createUsernameTextField.getText(), createPasswordTextField.getText(), checkPasswordTextField.getText())) {
-                    database.add(new User(createUsernameTextField.getText(), createPasswordTextField.getText()));
-                } else {
-                    displaySignupErrorMessage();
-                }                
-            }
-        };
+        
 
         /**
          * Listener for addTask page.

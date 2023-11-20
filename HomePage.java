@@ -1,68 +1,35 @@
-import java.awt.EventQueue;
-
 
 import javax.swing.JFrame;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
-import java.awt.Panel;
+import java.time.*;
+
 import javax.swing.JScrollPane;
-import javax.swing.JScrollBar;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import java.awt.Scrollbar;
-import javax.swing.Box;
-import javax.swing.JTable;
-import javax.swing.JSlider;
-import java.awt.ScrollPane;
-import java.awt.Point;
 
 
 
-public class HomePage {
+public class HomePage extends Page {
 
-	private JFrame frmHomePage;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
-
-	/**
-	 * Launch the application.
+	/*
+	 * global variables that are used
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					HomePage window = new HomePage();
-					window.frmHomePage.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private JFrame frmHomePage;
+    private JList<String> taskList;
+	private int currentUserID;
+	private Schedule[] currentSchedule;
 
 	/**
 	 * Create the application.
 	 */
-	public HomePage() {
+	public HomePage(String username, String password) {
+		currentUserID = connector.getUserID(username, password);
+		currentSchedule = connector.getSchedule(currentUserID);
 		initialize();
 	}
 
@@ -70,14 +37,20 @@ public class HomePage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		/*
+		 * creating the main frame 
+		 */
 		frmHomePage = new JFrame();
 		frmHomePage.getContentPane().setBackground(new Color(192, 192, 192));
 		frmHomePage.setBackground(new Color(192, 192, 192));
 		frmHomePage.setTitle("Home Page");
-		frmHomePage.setBounds(100, 100, 672, 495);
+		frmHomePage.setBounds(100, 100, 451, 308);
 		frmHomePage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHomePage.getContentPane().setLayout(null);
 		
+		/*
+		 * creating the label that shows the date
+		 */
 		JLabel lblLogin = new JLabel("Date");
 		lblLogin.setBounds(29, 10, 105, 35);
 		lblLogin.setForeground(new Color(0, 0, 0));
@@ -86,69 +59,106 @@ public class HomePage {
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		frmHomePage.getContentPane().add(lblLogin);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 42, 187, 181);
-		frmHomePage.getContentPane().add(scrollPane);
-		
 	
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(262, 44, 200, 179);
-		frmHomePage.getContentPane().add(panel);
-		panel.setLayout(null);
+
+		/*
+		 * creating a scroll pane that show the tasks for the day
+		 */
+        JScrollPane tasksPanel = new JScrollPane(taskList);
+        tasksPanel.setBounds(10, 55, 192, 205);
+		frmHomePage.getContentPane().add(tasksPanel);
+		tasksPanel.setViewportView(taskList);
+
+;
+		/*
+		 * creating the add task button.
+		 * the add task button takes the user to the create task panel
+		 * where the user will be able to create and add a new task
+		 */
+		JButton btnAddTask = new JButton("Add task");
+		btnAddTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+                CreateTask AddTaskFrame = new CreateTask();
+                AddTaskFrame.setVisible(true);
+                frmHomePage.dispose();
+			}
+		});
+		btnAddTask.setBounds(270, 55, 117, 21);
+		frmHomePage.getContentPane().add(btnAddTask);
 		
+		/*
+		 * creating the save button
+		 * the save button will save the task list to the database
+		 */
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+                LoginPage LoginPageFrame = new LoginPage();
+                LoginPageFrame.setVisible(true);
+                frmHomePage.dispose();
+			}
+		});
+		btnSave.setBounds(270, 100, 117, 21);
+		frmHomePage.getContentPane().add(btnSave);
 		
-		
-		
-		textField = new JTextField();
-		textField.setBounds(67, 10, 87, 19);
-		panel.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(67, 39, 87, 19);
-		panel.add(textField_1);
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(67, 97, 87, 19);
-		panel.add(textField_3);
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(67, 126, 87, 19);
-		panel.add(textField_4);
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(67, 155, 87, 19);
-		panel.add(textField_5);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(67, 184, 87, 19);
-		panel.add(textField_6);
-		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		textField_7.setBounds(67, 213, 87, 19);
-		panel.add(textField_7);
-		
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-		textField_8.setBounds(67, 242, 87, 19);
-		panel.add(textField_8);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(12, 13, 45, 13);
-		panel.add(lblNewLabel);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(67, 68, 87, 19);
-		panel.add(textField_2);
-		textField_2.setColumns(10);
+		/*
+		 * creating the logout button
+		 * the logout button will log the user out of
+		 * their account and take them to the login page
+		 */
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	
+		    	// THIS SHOULD BE WHAT THE SAVE BUTTON DOES
+		    	// AND THE SAVE BUTTON SHOULD SAVE ALL THE USERS DATA TO THE DATABASE
+		        // Close the program
+		        System.exit(0);
+		    }
+		});
+		btnLogout.setBounds(270, 144, 117, 21);
+		frmHomePage.getContentPane().add(btnLogout);
 		
 
+	}
+	 
+	/*
+	 * sets the homepage visibility to show the page
+	 */
+    public void setVisible(boolean visible) {
+    	frmHomePage.setVisible(visible);
+
+    }
+
+	/**
+	 * Method fillTask fills taskList with users tasks
+	 */
+	public void fillTask() {
+		
+		// Use currentUserID and connector to access schedules
+		LocalDate today = LocalDate.now();
+		DayOfWeek day = today.getDayOfWeek();
+		switch (day) {
+			case SUNDAY:
+				System.out.println(currentSchedule[0]);
+				break;
+		
+			case MONDAY:
+				System.out.println(currentSchedule[1]);
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Method fill day fills taskTextArea with current day
+	 */
+	public void fillDay(Schedule schedule) {
+		
 	}
 }

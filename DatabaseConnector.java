@@ -1,6 +1,7 @@
-package aei_database;
-
 import java.sql.*;
+
+import javax.sql.rowset.serial.SerialException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,6 +20,7 @@ public class DatabaseConnector {
 	//test variables for userID and idSchedule
 	int userID = 1;
 	int idSched = 1;
+	Schedule[] userSchedule = new Schedule[7];
 	
 	Connection conn = null;
 	/**
@@ -46,6 +48,7 @@ public class DatabaseConnector {
 	 * @param ps new users password
 	 */
 	public void createUser(String uN, String ps) {
+
 		String insertSQL = "INSERT into users(userName, password, userID)" + "values (" + uN + ", " + ps + ", " + userID++;
 		try {
 			Statement st = conn.createStatement();
@@ -54,6 +57,8 @@ public class DatabaseConnector {
 			System.out.println("Connection not found");
 		}
 	}
+
+	
 	/**
 	 * Prints out the user names of the users and the ID associated with that user name
 	 */
@@ -77,8 +82,11 @@ public class DatabaseConnector {
 	 * @param schName The name of the schedule(a day between sunday and saturday)
 	 */
 	public void serialize(Schedule sch, String schName) {
-		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newBufferedReader(Paths.get(schName)))){
+		try{
+			ObjectOutputStream oos = new ObjectOutputStream(Files.newBufferedReader(Paths.get(schName)));
 			oos.writeObject(sch);
+		} catch (SerialException e) {
+
 		}
 	}
 	
@@ -101,6 +109,35 @@ public class DatabaseConnector {
 	}
 	
 
+	/**
+	 * Placeholder for checkUsername method
+	 */
+	public boolean checkUsername(String username){
+
+		return false;
+	}
+
+	/**
+	 * Placeholder for checkLogin method
+	 */
+	public boolean checkLogin(String username, String password) {
+		
+		return false;
+	}
+
+	/**
+	 * Placeholder getCurrentUserID method, returns user ID associated with passed username and password
+	 */
+	public int getUserID(String username, String password) {
+		return -1;
+	}
 	
+	/**
+	 * Placeholder for getSchedule method
+	 */
+	public Schedule[] getSchedule(int userID) {
+		Schedule[] returnSchedule = new Schedule[7];
+		return returnSchedule;
+	}
 }
 	
