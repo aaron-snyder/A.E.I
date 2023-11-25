@@ -175,8 +175,20 @@ public class DatabaseConnector {
 	 * Placeholder for getSchedule method
 	 */
 	public Schedule[] getSchedule(int userID) {
-		Schedule[] returnSchedule = new Schedule[7];
-		return returnSchedule;
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery("select * from schedules");
+		Schedule[] sched = new Schedule[7];
+		Try{
+			while(rs.hasNext()){
+				int curUserID = rs.getInt("userID")
+				if(curUserID == userID){
+					return sched;
+				}
+			}
+		}else(Exception e){
+			System.out.println("Connection not found");
+		}
+		return null;
 	}
 }
 	
