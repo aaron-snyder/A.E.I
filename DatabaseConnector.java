@@ -110,18 +110,43 @@ public class DatabaseConnector {
 	
 
 	/**
-	 * Placeholder for checkUsername method
+	 * A method to check if a username is already stored in our database.
 	 */
 	public boolean checkUsername(String username){
-
-		return false;
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery("select userName from users");
+		Try{
+			while(rs.hasNext()){
+				String userN = rs.getString("userName");
+				if(userN == username){
+					//print statement for user already exists
+					return false;
+				}
+			}
+		}else(Exception e){
+			System.out.println("Connection not found");
+		}
+		
+		return true;
 	}
 
 	/**
 	 * Placeholder for checkLogin method
 	 */
 	public boolean checkLogin(String username, String password) {
-		
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery("select userName,password from users");
+		Try{
+			while(rs.hasNext()){
+				String userN = rs.getString("userName");
+				String pass = rs.getString("password")
+				if(userN.equals(username) && pass.eqluals(password)){
+					return true;
+				}
+			}
+		}else(Exception e){
+			System.out.println("Connection not found");
+		}
 		return false;
 	}
 
@@ -129,6 +154,20 @@ public class DatabaseConnector {
 	 * Placeholder getCurrentUserID method, returns user ID associated with passed username and password
 	 */
 	public int getUserID(String username, String password) {
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery("select * from users");
+		Try{
+			while(rs.hasNext()){
+				String userN = rs.getString("userName");
+				String pass = rs.getString("password")
+				int curUserID = rs.getInt("userID")
+				if(userN.equals(username) && pass.eqluals(password)){
+					return curUserID;
+				}
+			}
+		}else(Exception e){
+			System.out.println("Connection not found");
+		}
 		return -1;
 	}
 	
