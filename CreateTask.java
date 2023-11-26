@@ -299,15 +299,22 @@ public class CreateTask {
             int startMin = minBoxEnd.getSelectedIndex();
             int endHour = hourBoxEnd.getSelectedIndex();
             int endMin = minBoxEnd.getSelectedIndex();
-            String amPm;
+            String amPmStart;
+			String amPmEnd;
             boolean[] days = new boolean[7];
             Arrays.fill(days, false);
 
-            if (chckbxPm.isSelected()) {
-                amPm = "pm";
+            if (chckbxPmStart.isSelected()) {
+                amPmStart = "pm";
             } else {
-                amPm = "am";
+                amPmStart = "am";
             }
+
+			if (chckbxPmEnd.isSelected()) {
+				amPmEnd = "pm";
+			} else {
+				amPmEnd = "am";
+			}
 
             // Check each check box, if selected, set corresponding day to true
             if (chckbxSun.isSelected()) {
@@ -339,7 +346,7 @@ public class CreateTask {
             }
 
             // Create new task.
-            Task newTask = new Task(newTaskName, startHour, startMin, endHour, endMin, amPm, days);
+            Task newTask = new Task(newTaskName, startHour, startMin, endHour, endMin, amPmStart, amPmEnd, days);
 
             // Check if new task is compatible, if true, add to schedule, else display error message.
 			if (checkTask(newTask)) {

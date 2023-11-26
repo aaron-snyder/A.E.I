@@ -110,12 +110,12 @@ public class DatabaseConnector {
 	
 
 	/**
-	 * A method to check if a username is already stored in our database.
+	 * Placeholder for checkUsername method
 	 */
 	public boolean checkUsername(String username){
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery("select userName from users");
-		Try{
+		try {
 			while(rs.hasNext()){
 				String userN = rs.getString("userName");
 				if(userN == username){
@@ -123,7 +123,7 @@ public class DatabaseConnector {
 					return false;
 				}
 			}
-		}else(Exception e){
+		} catch (Exception e) {
 			System.out.println("Connection not found");
 		}
 		
@@ -136,15 +136,15 @@ public class DatabaseConnector {
 	public boolean checkLogin(String username, String password) {
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery("select userName,password from users");
-		Try{
+		try {
 			while(rs.hasNext()){
 				String userN = rs.getString("userName");
-				String pass = rs.getString("password")
-				if(userN.equals(username) && pass.eqluals(password)){
+				String pass = rs.getString("password");
+				if(userN.equals(username) && pass.equals(password)){
 					return true;
 				}
 			}
-		}else(Exception e){
+		} catch (Exception e) {
 			System.out.println("Connection not found");
 		}
 		return false;
@@ -156,16 +156,16 @@ public class DatabaseConnector {
 	public int getUserID(String username, String password) {
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery("select * from users");
-		Try{
+		try{
 			while(rs.hasNext()){
 				String userN = rs.getString("userName");
-				String pass = rs.getString("password")
-				int curUserID = rs.getInt("userID")
-				if(userN.equals(username) && pass.eqluals(password)){
+				String pass = rs.getString("password");
+				int curUserID = rs.getInt("userID");
+				if(userN.equals(username) && pass.equals(password)){
 					return curUserID;
 				}
 			}
-		}else(Exception e){
+		} catch (Exception e) {
 			System.out.println("Connection not found");
 		}
 		return -1;
@@ -178,17 +178,18 @@ public class DatabaseConnector {
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery("select * from schedules");
 		Schedule[] sched = new Schedule[7];
-		Try{
+		try {
 			while(rs.hasNext()){
-				int curUserID = rs.getInt("userID")
+				int curUserID = rs.getInt("userID");
 				if(curUserID == userID){
 					return sched;
 				}
 			}
-		}else(Exception e){
+		} catch (Exception e) {
 			System.out.println("Connection not found");
 		}
 		return null;
 	}
 }
+
 	

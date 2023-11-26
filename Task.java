@@ -11,7 +11,8 @@ public class Task implements Serializable {
     private int startMin;
     private int endHour;
     private int endMin;
-    private String amPm;
+    private String amPmStart;
+    private String amPmEnd;
     private boolean[] days = new boolean[7];
 
     /**
@@ -22,13 +23,14 @@ public class Task implements Serializable {
     /**
      * Constructor that takes in parameters to completely fill a valid task
      */
-    public Task(String name, int startHour, int startMin, int endHour, int endMin, String amPm, boolean[] days) {
+    public Task(String name, int startHour, int startMin, int endHour, int endMin, String amPmStart, String amPmEnd, boolean[] days) {
         this.name = name;
         this.startHour = startHour;
         this.startMin = startMin;
         this.endHour = endHour;
         this.endMin = endMin;
-        this.amPm = amPm;
+        this.amPmStart = amPmStart;
+        this.amPmEnd = amPmEnd;
         this.days = days;
     }
 
@@ -39,9 +41,7 @@ public class Task implements Serializable {
         return notNull;
     }
     
-    /**
-     * Getters and Setters
-     */
+    // Setter for null
     public void setNull(boolean isNull){
         if (isNull) {
             notNull = false;
@@ -50,15 +50,90 @@ public class Task implements Serializable {
         }
     }
 
+    // Getter for name
+    public String getName(){
+        return name;
+    }
+
+    // Setter for name
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter for amPmStart
+    public String getAmPmStart() {
+        return amPmStart;
+    }
+
+    // Setter for amPmStart
+    public void setAmPmStart(String amPmStart) {
+        this.amPmStart = amPmStart;
+    }
+
+    // Getter for amPmEnd
+    public String getAmPmEnd() {
+        return amPmEnd;
+    }
+
+    // Setter for amPmEnd
+    public void setAmPmEnd(String amPmEnd) {
+        this.amPmEnd = amPmEnd;
+    }
+
+    // Getter for startTime, returns formatted start time (10:30 is 1030, 5:40 is 1740 etc...)
     public int getStart() {
-        return -1;
+
+        String formattedStart = Integer.toString(startHour) + Integer.toString(startMin);
+        if (amPmStart.equals("pm")) {
+            return Integer.parseInt(formattedStart) + 1200;
+        }
+        
+        return Integer.parseInt(formattedStart);
     }
 
+    // Setter for startHour
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
+
+    // Setter for startMin
+    public void setStartMin(int startMin) {
+        this.startMin = startMin;
+    }
+
+    // Getter for endTime, returns formatted end time (10:30 is 1030, 5:40 is 1740 etc...)
     public int getEnd() {
-        return -1;
+
+        String formattedStart = Integer.toString(endHour) + Integer.toString(endMin);
+        if (amPmStart.equals("pm")) {
+            return Integer.parseInt(formattedStart) + 1200;
+        }
+        
+        return Integer.parseInt(formattedStart);
     }
 
+    // Setter for startHour
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    // Setter for startMin
+    public void setEndMin(int endMin) {
+        this.endMin = endMin;
+    }
+
+    // Getter for days
     public boolean[] getDays() {
         return days;
+    }
+
+    // Setter for days
+    public void setDays(boolean[] days) {
+        this.days = days;
+    }
+
+    // toString() method
+    public String toString(){
+        return name + " from " + startHour + ":" + startMin + " to " + endHour + ":" + endMin;
     }
 }
