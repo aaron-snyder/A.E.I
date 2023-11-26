@@ -128,9 +128,10 @@ public class LoginPage extends Page {
 	/**
 	 * Method openCreateAccountPage, switches active page to create account page
 	 */
-	public void openHomePage(String username, String password) {
+	public void openHomePage(int userID, Schedule[] schedule) {
+
 		// Open HomePageFrame
-        HomePage HomePageFrame = new HomePage(username, password);
+        HomePage HomePageFrame = new HomePage(userID, schedule);
         HomePageFrame.setVisible(true);
         frmLoginPage.dispose();
 	}
@@ -139,10 +140,18 @@ public class LoginPage extends Page {
 	 * Method openCreateAccountPage, switches active page to create account page
 	 */
 	public void openCreateAccountPage() {
+
 		// Open CreateAccountFrame
             CreateAccount createAccountFrame = new CreateAccount();
             createAccountFrame.setVisible(true);
             frmLoginPage.dispose();
+	}
+
+	/**
+	 * Method to display error message informing user something went wrong with their login request
+	 */
+	public void displayLoginErrorMessage(){
+		JOptionPane.showMessageDialog(frmLoginPage, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -161,18 +170,15 @@ public class LoginPage extends Page {
                     break;
                 case "Login":
                     if (connector.checkLogin(usernameField.getText(), new String(passwordField.getPassword()))) {
-                        openHomePage(usernameField.getText(), new String(passwordField.getPassword()));
-                    } else {
+						int userID = connector.getUserID(usernameField.getText(), new String(passwordField.getPassword()));
+						Schedule[] schedule = connector.getSchedule(userID);
+						openHomePage(userID, schedule);
+					} else {
                         displayLoginErrorMessage();
                     }
             }
         }
     };
 
-	/**
-	 * Placeholder for displaying an error message
-	 */
-	public void displayLoginErrorMessage(){
-		JOptionPane.showMessageDialog(frmLoginPage, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
-	}
+	
 }

@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Panel;
 
-
-
 public class CreateAccount extends Page {
 
 	// global varibles for the create account page
@@ -125,7 +123,19 @@ public class CreateAccount extends Page {
         frmCreateAccount.setVisible(visible);
     }
 
+	/**
+	 * Method checkNewAccount returns true if username doesn't exist AND passwords match
+	 */
+	public boolean checkNewAccount(String username, char[] password1, char[] password2) {
+		return connector.checkUsername(username) && new String(passwordField.getPassword()).equals(new String(passwordConfirmField.getPassword()));
+	}
 
+	/**
+	 * Method to inform user that something went wrong with their sign up attempt
+	 */
+	public void displaySignupErrorMessage(){
+		JOptionPane.showMessageDialog(frmCreateAccount, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+	}
 
 	/**
      * Listener for signup page.
@@ -150,18 +160,4 @@ public class CreateAccount extends Page {
             }                
         }
     };
-
-	/**
-	 * Method checkNewAccount returns true if username doesn't exist AND passwords match
-	 */
-	public boolean checkNewAccount(String username, char[] password1, char[] password2) {
-		return connector.checkUsername(username) && passwordField.getPassword().equals(passwordConfirmField.getPassword());
-	}
-
-	/**
-	 * Placeholder for displaying an error message
-	 */
-	public void displaySignupErrorMessage(){
-		JOptionPane.showMessageDialog(frmCreateAccount, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
-	}
 }

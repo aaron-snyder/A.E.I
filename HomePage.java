@@ -16,20 +16,24 @@ import javax.swing.JScrollPane;
 
 public class HomePage extends Page {
 
+	/**
+	 * Fields
+	 */
+	private int currentUserID;
+	private Schedule[] currentSchedule;
+
 	/*
 	 * global variables that are used
 	 */
 	private JFrame frmHomePage;
     private JList<String> taskList;
-	private int currentUserID;
-	private Schedule[] currentSchedule;
-
+	
 	/**
-	 * Create the application.
+	 * Homepage constructor for userID and schedule passed
 	 */
-	public HomePage(String username, String password) {
-		currentUserID = connector.getUserID(username, password);
-		currentSchedule = connector.getSchedule(currentUserID);
+	public HomePage(int userID, Schedule[] schedule) {
+		currentUserID = userID;
+		currentSchedule = schedule;
 		initialize();
 	}
 
@@ -76,21 +80,18 @@ public class HomePage extends Page {
 		 * the add task button takes the user to the create task panel
 		 * where the user will be able to create and add a new task
 		 */
-		JButton btnAddTask = new JButton("Add task");
-		btnAddTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-                CreateTask AddTaskFrame = new CreateTask();
-                AddTaskFrame.setVisible(true);
-                frmHomePage.dispose();
-			}
-		});
+		JButton btnAddTask = new JButton("Add Task");
+		btnAddTask.addActionListener(homePage);
 		btnAddTask.setBounds(270, 55, 117, 21);
 		frmHomePage.getContentPane().add(btnAddTask);
 		
+
+
+
+
 		/*
 		 * creating the save button
-		 * the save button will save the task list to the database
+		 * the save button will save the task list to the database ********************************************************************************
 		 */
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
@@ -103,6 +104,11 @@ public class HomePage extends Page {
 		});
 		btnSave.setBounds(270, 100, 117, 21);
 		frmHomePage.getContentPane().add(btnSave);
+
+
+
+
+
 		
 		/*
 		 * creating the logout button
@@ -110,20 +116,9 @@ public class HomePage extends Page {
 		 * their account and take them to the login page
 		 */
 		JButton btnLogout = new JButton("Logout");
-		btnLogout.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    	
-		    	// THIS SHOULD BE WHAT THE SAVE BUTTON DOES
-		    	// AND THE SAVE BUTTON SHOULD SAVE ALL THE USERS DATA TO THE DATABASE
-		        // Close the program
-		        System.exit(0);
-		    }
-		});
+		btnLogout.addActionListener(homePage);
 		btnLogout.setBounds(270, 144, 117, 21);
 		frmHomePage.getContentPane().add(btnLogout);
-		
-
 	}
 	 
 	/*
@@ -139,20 +134,43 @@ public class HomePage extends Page {
 	 */
 	public void fillTask() {
 		
-		// Use currentUserID and connector to access schedules
+		// Determine the day of the week to display schedule for current day
 		LocalDate today = LocalDate.now();
 		DayOfWeek day = today.getDayOfWeek();
 		switch (day) {
 			case SUNDAY:
 				System.out.println(currentSchedule[0]);
+
 				break;
 		
 			case MONDAY:
 				System.out.println(currentSchedule[1]);
 				break;
+
+			case TUESDAY:
+				System.out.println(currentSchedule[2]);
+				break;
+		
+			case WEDNESDAY:
+				System.out.println(currentSchedule[3]);
+				break;
+
+				case THURSDAY:
+				System.out.println(currentSchedule[4]);
+				break;
+		
+			case FRIDAY:
+				System.out.println(currentSchedule[5]);
+				break;
+
+			case SATURDAY:
+				System.out.println(currentSchedule[6]);
+				break;
+
 			default:
 				break;
 		}
+
 	}
 
 	/**
@@ -161,4 +179,47 @@ public class HomePage extends Page {
 	public void fillDay(Schedule schedule) {
 		
 	}
+
+	/**
+	 * Method displayAddTaskPage opens the AddTask page
+	 */
+	public void displayAddTaskPage() {
+		CreateTask AddTaskFrame = new CreateTask(currentUserID, currentSchedule);
+        AddTaskFrame.setVisible(true);
+        frmHomePage.dispose();
+	}
+
+	/**
+	 * Method closeProgram, saves users info and closes the program
+	 */
+	public void closeProgram() {
+
+		// THIS SHOULD BE WHAT THE SAVE BUTTON DOES
+		// AND THE SAVE BUTTON SHOULD SAVE ALL THE USERS DATA TO THE DATABASE
+		// Close the program
+		System.exit(0);
+	}
+
+	/**
+     * Listener for home page.
+     */
+    ActionListener homePage = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // Obtain button pressed in form of string.
+            String action = e.getActionCommand();
+
+            // Switch to catch which button was pressed and perform appropriate functions.
+            switch (action) {
+
+                case "Add Task":
+                    displayAddTaskPage();
+                    break;
+
+                case "Save and Logout":
+                    closeProgram();
+                }
+            }
+        };	
 }

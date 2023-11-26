@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -17,38 +19,48 @@ import javax.swing.SwingConstants;
 
 public class CreateTask {
 
-	/*
-	 * creating global variables
+	/**
+	 * Fields
+	 */
+	private int currentUserID;
+	private Schedule[] currentSchedule;
+
+
+	/**
+	 * Creating global variables
 	 */
 	private JFrame frmCreateTask;
 	private JTextField taskField;
     private DefaultListModel<String> taskListModel;
     private JList<String> taskList;
     
-    // variabels that will hold the different hours and mins that the user can check
+    // Variables that will hold the different hours and mins that the user can check
 	private JComboBox<String> hourBoxStart = new JComboBox<>();
-	private JComboBox<String> minBoxEnd = new JComboBox<String>();
+	private JComboBox<String> minBoxEnd = new JComboBox<>();
+	private JComboBox<String> hourBoxEnd = new JComboBox<>();
+	private JComboBox<String> minBoxStart = new JComboBox<>();
 	
-	// variables for the am and pm check boxes
+	// Variables for the AM and PM check boxes
 	private JCheckBox chckbxAm = new JCheckBox("AM");
 	private JCheckBox chckbxPm = new JCheckBox("PM");
 	
-	// variabes for the sunday-saturday check boxes
-	private JCheckBox chckbxNewCheckBox = new JCheckBox("Sun");
+	// Variables for the Sunday-Saturday check boxes
+	private JCheckBox chckbxSun = new JCheckBox("Sun");
 	private JCheckBox chckbxMon = new JCheckBox("Mon");
 	private JCheckBox chckbxTue = new JCheckBox("Tue");
 	private JCheckBox chckbxWed = new JCheckBox("Wed");
 	private JCheckBox chckbxThur = new JCheckBox("Thur");
 	private JCheckBox chckbxFri = new JCheckBox("Fri");
 	private JCheckBox chckbxSat = new JCheckBox("Sat");
-	private final JComboBox<String> hourBoxEnd = new JComboBox<String>();
-	private final JComboBox<String> minBoxStart = new JComboBox<String>();
+	
 	private final JLabel lblStart = new JLabel("Start:");
 	private final JLabel lblEnd = new JLabel("End:");
 	
 
 
-	public CreateTask() {
+	public CreateTask(int userID, Schedule[] schedule) {
+		currentUserID = userID;
+		currentSchedule = schedule;
 		initialize();
 	}
 
@@ -94,12 +106,7 @@ public class CreateTask {
 		inputPanel.add(btnAddTask);
 		
         // ActionListener for the "Add Task" button
-        btnAddTask.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addTask();
-            }
-        });
+        btnAddTask.addActionListener(addTaskPage);
 		
         // List to display tasks
         taskListModel = new DefaultListModel<>();
@@ -122,8 +129,8 @@ public class CreateTask {
 		/*
 		 * adding the different check boxes to the frame
 		 */
-		chckbxNewCheckBox.setBounds(53, 64, 51, 21);
-		frmCreateTask.getContentPane().add(chckbxNewCheckBox);
+		chckbxSun.setBounds(53, 64, 51, 21);
+		frmCreateTask.getContentPane().add(chckbxSun);
 		
 		chckbxMon.setBounds(106, 64, 51, 21);
 		frmCreateTask.getContentPane().add(chckbxMon);
@@ -237,90 +244,9 @@ public class CreateTask {
 		lblEnd.setBounds(212, 158, 51, 20);
 		
 		frmCreateTask.getContentPane().add(lblEnd);
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-                HomePage homePage = new HomePage();
-                homePage.setVisible(true);
-                frmCreateTask.dispose();
-			}
-		});
-		
-
-		
-		
+		btnBack.addActionListener(addTaskPage);
 	}
-	
-	/*
-	 * method format the task that is going to be added
-	 * and adds the task
-	 */
-    private void addTask() {
-        String taskText = taskField.getText();
-        if (!taskText.isEmpty()) {
-            // Get selected day
-            String selectedDay = getSelectedDay();
-            
-            // Get selected hour
-            String selectedHourStart = (String) hourBoxStart.getSelectedItem();
-            
-            // Get selected min
-            String selectedMinStart = (String) minBoxStart.getSelectedItem();
-            
-            // Get selected hour
-            String selectedHourEnd = (String) hourBoxEnd.getSelectedItem();
-            
-            // Get selected min
-            String selectedMinEnd = (String) minBoxEnd.getSelectedItem();
-            
-            // Get selected AM/PM
-            String selectedAmPm = getSelectedAmPm();
-            
-            // Construct the task string
-            String taskString = taskText + " - " + selectedDay + ", " + selectedHourStart + ":" + selectedMinStart + " " + selectedAmPm + " " + selectedHourEnd + ", " + selectedMinEnd;
 
-            // Add the task to the list
-            taskListModel.addElement(taskString);
-
-            // Clear the task input field
-            taskField.setText("");
-        } else {
-            JOptionPane.showMessageDialog(frmCreateTask, "Please enter a task.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    
-    /*
-     * method to get the day that is checked and return those days
-     */
-    private String getSelectedDay() {
-        String selectedDay = "";
-        if (chckbxNewCheckBox.isSelected()) selectedDay += "Sun, ";
-        if (chckbxMon.isSelected()) selectedDay += "Mon, ";
-        if (chckbxTue.isSelected()) selectedDay += "Tue, ";
-        if (chckbxWed.isSelected()) selectedDay += "Wed, ";
-        if (chckbxThur.isSelected()) selectedDay += "Thur, ";
-        if (chckbxFri.isSelected()) selectedDay += "Fri, ";
-        if (chckbxSat.isSelected()) selectedDay += "Sat";
-
-        return selectedDay;
-    }
-
-    /*
-     * method to return the checked am, pm or both and return them
-     */
-    private String getSelectedAmPm() {
-        if (chckbxAm.isSelected() && chckbxPm.isSelected()) {
-            return "AM/PM";
-        } else if (chckbxAm.isSelected()) {
-            return "AM";
-        } else if (chckbxPm.isSelected()) {
-            return "PM";
-        } else {
-            return "";
-        }
-    }
-    
     /*
      * sets the visibilty of the create task frame
      */
@@ -328,4 +254,104 @@ public class CreateTask {
         frmCreateTask.setVisible(visible);
     }
 
+	public void displayNewTaskSuccessMessage() {
+		JOptionPane.showMessageDialog(frmCreateTask, "Task created successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public void displayNewTaskErrorMessage() {
+		JOptionPane.showMessageDialog(frmCreateTask, "You already have tasks in that time slot!", "Error", JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+	 * Method to display Home Page again
+	 */
+	public void displayHomePage(){
+		HomePage homePage = new HomePage(currentUserID, currentSchedule);
+        homePage.setVisible(true);
+        frmCreateTask.dispose();
+	}
+
+	/**
+	 * Method to check if the task is valid with weeks schedule
+	 */
+	public boolean checkTask(Task task){
+		for (int index = 0; index < 6; index++) {
+			if (task.getDays()[index] && !currentSchedule[index].checkTime(task.getStart(), task.getEnd())) {
+				return false;
+			}
+		}
+		return true;
+    }
+
+	/**
+     * Listener for addTask page.
+     */
+    ActionListener addTaskPage = new ActionListener() {
+         @Override
+        public void actionPerformed(ActionEvent e) {
+
+            /**
+             * JCheckBox sunCheckBox, monCheckBox, tueCheckBox, wedCheckBox, thuCheckBox, friCheckBox, satCheckBox, amCheckBox, pmCheckBox;
+             */
+            // Obtain all info from input fields to create new task.
+            String newTaskName = taskField.getText();
+            int startHour = hourBoxStart.getSelectedIndex();
+            int startMin = minBoxEnd.getSelectedIndex();
+            int endHour = hourBoxEnd.getSelectedIndex();
+            int endMin = minBoxEnd.getSelectedIndex();
+            String amPm;
+            boolean[] days = new boolean[7];
+            Arrays.fill(days, false);
+
+            if (chckbxPm.isSelected()) {
+                amPm = "pm";
+            } else {
+                amPm = "am";
+            }
+
+            // Check each check box, if selected, set corresponding day to true
+            if (chckbxSun.isSelected()) {
+                days[0] = true;
+            }
+
+            if (chckbxMon.isSelected()) {
+                days[1] = true;
+            }
+
+            if (chckbxTue.isSelected()) {
+                days[2] = true;
+            }
+
+            if (chckbxWed.isSelected()) {
+                days[3] = true;
+            }
+                
+            if (chckbxThur.isSelected()) {
+               days[4] = true;
+            }
+
+            if (chckbxFri.isSelected()) {
+                days[5] = true;
+            }
+
+            if (chckbxSat.isSelected()) {
+                days[6] = true;
+            }
+
+            // Create new task.
+            Task newTask = new Task(newTaskName, startHour, startMin, endHour, endMin, amPm, days);
+
+            // Check if new task is compatible, if true, add to schedule, else display error message.
+			if (checkTask(newTask)) {
+				for (int index = 0; index < 6; index++) {
+					if (newTask.getDays()[index] && currentSchedule[index].checkTime(newTask.getStart(), newTask.getEnd())) {
+						
+					}
+				}
+				displayNewTaskSuccessMessage();
+			} else {
+				displayNewTaskErrorMessage();
+			}
+    	}
+	};
 }
