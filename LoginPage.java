@@ -171,7 +171,7 @@ public class LoginPage extends Page {
                 case "Login":
                     if (connector.checkLogin(usernameField.getText(), new String(passwordField.getPassword()))) {
 						int userID = connector.getUserID(usernameField.getText(), new String(passwordField.getPassword()));
-						Schedule[] schedule = connector.getSchedule(userID);
+						Schedule[] schedule = connector.deserialize(userID);
 						openHomePage(userID, schedule);
 					} else {
                         displayLoginErrorMessage();

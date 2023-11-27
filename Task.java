@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Task implements Serializable {
 
     private boolean notNull = false;
-    private String name;
+    private String name = "";
     private int startHour;
     private int startMin;
     private int endHour;
@@ -32,6 +32,14 @@ public class Task implements Serializable {
         this.amPmStart = amPmStart;
         this.amPmEnd = amPmEnd;
         this.days = days;
+        this.notNull = true;
+    }
+
+    /**
+     * Equals method **************** Todo
+     */
+    public boolean sameTask(Task task) {
+        return this.name.equals(task.getName());
     }
 
     /**
@@ -83,12 +91,13 @@ public class Task implements Serializable {
     // Getter for startTime, returns formatted start time (10:30 is 1030, 5:40 is 1740 etc...)
     public int getStart() {
 
-        String formattedStart = Integer.toString(startHour) + Integer.toString(startMin);
+        int time = startHour * 100 + startMin;
+
         if (amPmStart.equals("pm")) {
-            return Integer.parseInt(formattedStart) + 1200;
+            time += 1200;
         }
-        
-        return Integer.parseInt(formattedStart);
+
+        return time;
     }
 
     // Setter for startHour
@@ -104,12 +113,13 @@ public class Task implements Serializable {
     // Getter for endTime, returns formatted end time (10:30 is 1030, 5:40 is 1740 etc...)
     public int getEnd() {
 
-        String formattedStart = Integer.toString(endHour) + Integer.toString(endMin);
-        if (amPmStart.equals("pm")) {
-            return Integer.parseInt(formattedStart) + 1200;
+        int time = endHour * 100 + endMin;
+
+        if (amPmEnd.equals("pm")) {
+            time += 1200;
         }
-        
-        return Integer.parseInt(formattedStart);
+
+        return time;
     }
 
     // Setter for startHour
@@ -134,6 +144,9 @@ public class Task implements Serializable {
 
     // toString() method
     public String toString(){
-        return name + " from " + startHour + ":" + startMin + " to " + endHour + ":" + endMin;
+        String startMinString = (startMin == 0 ? "00" : "" + startMin);
+        String endMinString = (endMin == 0 ? "00" : "" + startMin);
+        
+        return name + " from " + startHour + ":" + startMinString + " to " + endHour + ":" + endMinString;
     }
 }

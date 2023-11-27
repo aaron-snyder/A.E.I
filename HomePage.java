@@ -2,15 +2,20 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.List;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.time.*;
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 
 
@@ -20,7 +25,7 @@ public class HomePage extends Page {
 	 * Fields
 	 */
 	private int currentUserID;
-	private Schedule[] currentSchedule;
+	private Schedule[] currentSchedule = new Schedule[7];
 
 	/*
 	 * global variables that are used
@@ -33,6 +38,18 @@ public class HomePage extends Page {
 	 */
 	public HomePage(int userID, Schedule[] schedule) {
 		currentUserID = userID;
+
+
+		for (int i = 0; i <= 2445; i += 15) {
+			System.out.println("time=" + i + ", task=" + schedule[1].schedule.get(i).toString());
+
+			String check = Integer.toString(i);
+            if (check.contains("45")) {
+                i += 40;
+            }
+		}
+		
+
 		currentSchedule = schedule;
 		initialize();
 	}
@@ -62,19 +79,7 @@ public class HomePage extends Page {
 		lblLogin.setFont(new Font("Yu Gothic Medium", Font.BOLD, 20));
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		frmHomePage.getContentPane().add(lblLogin);
-		
-	
-		
 
-		/*
-		 * creating a scroll pane that show the tasks for the day
-		 */
-        JScrollPane tasksPanel = new JScrollPane(taskList);
-        tasksPanel.setBounds(10, 55, 192, 205);
-		frmHomePage.getContentPane().add(tasksPanel);
-		tasksPanel.setViewportView(taskList);
-
-;
 		/*
 		 * creating the add task button.
 		 * the add task button takes the user to the create task panel
@@ -84,32 +89,16 @@ public class HomePage extends Page {
 		btnAddTask.addActionListener(homePage);
 		btnAddTask.setBounds(270, 55, 117, 21);
 		frmHomePage.getContentPane().add(btnAddTask);
-		
-
-
-
 
 		/*
 		 * creating the save button
-		 * the save button will save the task list to the database ********************************************************************************
+		 * the save button will save the task list to the database 
 		 */
 		JButton btnSave = new JButton("Save");
-		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-                LoginPage LoginPageFrame = new LoginPage();
-                LoginPageFrame.setVisible(true);
-                frmHomePage.dispose();
-			}
-		});
+		btnSave.addActionListener(homePage);
 		btnSave.setBounds(270, 100, 117, 21);
 		frmHomePage.getContentPane().add(btnSave);
 
-
-
-
-
-		
 		/*
 		 * creating the logout button
 		 * the logout button will log the user out of
@@ -119,6 +108,8 @@ public class HomePage extends Page {
 		btnLogout.addActionListener(homePage);
 		btnLogout.setBounds(270, 144, 117, 21);
 		frmHomePage.getContentPane().add(btnLogout);
+
+		fillTask();
 	}
 	 
 	/*
@@ -130,54 +121,98 @@ public class HomePage extends Page {
     }
 
 	/**
-	 * Method fillTask fills taskList with users tasks
+	 * getFormattedTaskList method takes in index for day and formats that days schedule appropriately
 	 */
-	public void fillTask() {
-		
-		// Determine the day of the week to display schedule for current day
-		LocalDate today = LocalDate.now();
-		DayOfWeek day = today.getDayOfWeek();
-		switch (day) {
-			case SUNDAY:
-				System.out.println(currentSchedule[0]);
+	public ArrayList<String> getFormattedTaskList(int day) {
+		System.out.println("In getFormattedTaskList (" + day + ")");
+		ArrayList<String> returnList = new ArrayList<>();
+		Task position = new Task();
+		Task currentTask = new Task();
+		for (int time = 0; time <= 2445; time += 15) {
+			//System.out.println("In for loop Time = " + time);
+			position = currentSchedule[day].getTaskAt(time);
+			if (!position.sameTask(currentTask) && position.notNull()) {
+				System.out.println("Return list adding: " + position.toString());
+				returnList.add(position.toString());
+			}
+			currentTask = position;
 
-				break;
-		
-			case MONDAY:
-				System.out.println(currentSchedule[1]);
-				break;
-
-			case TUESDAY:
-				System.out.println(currentSchedule[2]);
-				break;
-		
-			case WEDNESDAY:
-				System.out.println(currentSchedule[3]);
-				break;
-
-				case THURSDAY:
-				System.out.println(currentSchedule[4]);
-				break;
-		
-			case FRIDAY:
-				System.out.println(currentSchedule[5]);
-				break;
-
-			case SATURDAY:
-				System.out.println(currentSchedule[6]);
-				break;
-
-			default:
-				break;
+			String check = Integer.toString(time);
+			if (check.contains("45")) {
+				time += 40;
+			}
 		}
 
+		System.out.println("Exited for loop");
+		
+		for (String s : returnList) {
+			System.out.print("in formattedTaskList loop ");
+			System.out.println(s);
+		}
+		return returnList;
 	}
 
 	/**
-	 * Method fill day fills taskTextArea with current day
+	 * Method fillTask fills taskList with users tasks
 	 */
-	public void fillDay(Schedule schedule) {
+	public void fillTask() {
+
+		System.out.println("Entered fillTask()");
+
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		JScrollPane tasksPanel = new JScrollPane();
+		// Determine the day of the week to display schedule for current day
+		LocalDate today = LocalDate.now();
+		DayOfWeek day = today.getDayOfWeek();
+		ArrayList<String> test = new ArrayList<>();
 		
+		switch (day) {
+			case SUNDAY:
+				test = getFormattedTaskList(0);
+				break;
+		
+			case MONDAY:
+				test = getFormattedTaskList(1);
+				break;
+
+			case TUESDAY:
+				test = getFormattedTaskList(2);
+				break;
+		
+			case WEDNESDAY:
+				test = getFormattedTaskList(3);
+				break;
+
+			case THURSDAY:
+				test = getFormattedTaskList(4);
+				break;
+		
+			case FRIDAY:
+				test = getFormattedTaskList(5);
+				break;
+
+			case SATURDAY:
+				test = getFormattedTaskList(6);
+				break;
+
+			default:
+				System.out.println("Default case reached in fillTask()");
+				break;
+		}
+
+		for (String s : test) {
+			System.out.println(s);
+			listModel.addElement(s);
+		}
+		listModel.addElement("Test");
+
+		taskList = new JList<>(listModel);
+		taskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tasksPanel = new JScrollPane(taskList);
+		tasksPanel.setBounds(10, 55, 192, 205);
+		frmHomePage.getContentPane().add(tasksPanel);
+		tasksPanel.setViewportView(taskList);
+
 	}
 
 	/**
@@ -190,14 +225,20 @@ public class HomePage extends Page {
 	}
 
 	/**
+	 * Method save, updates database with users current schedule info
+	 */
+	public void save() {
+
+	}
+
+	/**
 	 * Method closeProgram, saves users info and closes the program
 	 */
 	public void closeProgram() {
 
-		// THIS SHOULD BE WHAT THE SAVE BUTTON DOES
-		// AND THE SAVE BUTTON SHOULD SAVE ALL THE USERS DATA TO THE DATABASE
-		// Close the program
-		System.exit(0);
+		LoginPage LoginPageFrame = new LoginPage();
+        LoginPageFrame.setVisible(true);
+        frmHomePage.dispose();
 	}
 
 	/**
@@ -217,8 +258,13 @@ public class HomePage extends Page {
                     displayAddTaskPage();
                     break;
 
-                case "Save and Logout":
-                    closeProgram();
+                case "Save":
+					save();
+                    break;
+
+				case "Logout":
+					closeProgram();
+					break;
                 }
             }
         };	
