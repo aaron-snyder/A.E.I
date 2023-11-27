@@ -41,8 +41,8 @@ public class CreateTask {
 	private JComboBox<String> minBoxStart = new JComboBox<>();
 	
 	// Variables for the AM and PM check boxes
-	private JCheckBox chckbxAm = new JCheckBox("AM");
-	private JCheckBox chckbxPm = new JCheckBox("PM");
+	private JCheckBox chckbxAmStart = new JCheckBox("AM Start");
+	private JCheckBox chckbxPmStart = new JCheckBox(" PM Start");
 	
 	// Variables for the Sunday-Saturday check boxes
 	private JCheckBox chckbxSun = new JCheckBox("Sun");
@@ -151,11 +151,11 @@ public class CreateTask {
 		frmCreateTask.getContentPane().add(chckbxSat);
 		
 		
-		chckbxAm.setBounds(208, 190, 51, 21);
-		frmCreateTask.getContentPane().add(chckbxAm);
+		chckbxAmStart.setBounds(208, 190, 70, 21);
+		frmCreateTask.getContentPane().add(chckbxAmStart);
 		
-		chckbxPm.setBounds(208, 213, 51, 21);
-		frmCreateTask.getContentPane().add(chckbxPm);
+		chckbxPmStart.setBounds(208, 213, 70, 21);
+		frmCreateTask.getContentPane().add(chckbxPmStart);
 		
 		/*
 		 * creating a label for "Time:"
@@ -226,7 +226,7 @@ public class CreateTask {
 		 * Homepage panel
 		 */
 		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(351, 230, 70, 20);
+		btnBack.setBounds(356, 230, 70, 20);
 		frmCreateTask.getContentPane().add(btnBack);
 		hourBoxEnd.setMaximumRowCount(12);
 		hourBoxEnd.setBounds(265, 157, 51, 21);
@@ -244,6 +244,14 @@ public class CreateTask {
 		lblEnd.setBounds(212, 158, 51, 20);
 		
 		frmCreateTask.getContentPane().add(lblEnd);
+		
+		JCheckBox chckbxAmEnd = new JCheckBox("AM End");
+		chckbxAmEnd.setBounds(280, 190, 70, 21);
+		frmCreateTask.getContentPane().add(chckbxAmEnd);
+		
+		JCheckBox chckbxPmEnd = new JCheckBox(" PM End");
+		chckbxPmEnd.setBounds(280, 213, 70, 21);
+		frmCreateTask.getContentPane().add(chckbxPmEnd);
 		btnBack.addActionListener(addTaskPage);
 	}
 
