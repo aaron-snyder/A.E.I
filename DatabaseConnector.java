@@ -35,7 +35,6 @@ public class DatabaseConnector {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password);
 			if(conn!=null) {
-				System.out.println("Connected Successfully");
 			}
 		} catch(Exception e) {
 			System.out.println("Connection Error");
@@ -74,7 +73,6 @@ public class DatabaseConnector {
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate(insertSQL);
-			System.out.println("Created user");
 		}catch(Exception e) {
 			System.out.println("Could not create user");
 			System.out.println(e);
@@ -97,12 +95,8 @@ public class DatabaseConnector {
 			System.out.println("Blob connection error");
 			System.out.println(e);
 		}
-
-		
-
 	}
 
-	
 	/**
 	 * Prints out the user names of the users and the ID associated with that user name
 	 */
@@ -147,17 +141,56 @@ public class DatabaseConnector {
 	 * @param schedID The id of the schedule 
 	 * @param fileName the file with the serialized object
 	 */
-	
-	public void storeSchedule(int userID, int schedID, File fileName) {
-		String insertSQL = "INSERT into schedules(idschedules, schedule_array, userID)" + "values (" + schedID++ + ", " + fileName + ", " + userID;
+
+	public void storeSchedule(int userID, Schedule[] schedule) {
+
 		try {
-			Statement st = conn.createStatement();
-			st.executeQuery(insertSQL);
-		}catch(Exception e) {
-			System.out.println("Connection not found");
+			conn = DriverManager.getConnection(url, user, password);
+			Blob blob = conn.createBlob();
+			blob.setBytes(1, serialize(schedule));
+
+			String blobSQL = "UPDATE schedules SET schedule_array = ? WHERE scheduleID = ?;";
+         
+			PreparedStatement preparedStatement = conn.prepareStatement(blobSQL);
+			preparedStatement.setBlob(1, blob);
+			preparedStatement.setInt(2, userID);
+         
+         preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Blob connection error");
+			System.out.println(e);
 		}
 	}
-	
+
+	/**
+	 * Deserialize method goes here
+	 */
+	public Schedule[] deserialize(int userID) {
+		Schedule[] deserializedSchedule = new Schedule[7];
+		
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select schedule_array from schedules where userID = " + userID + ";"); 
+			while(rs.next()) {
+				Blob blob = rs.getBlob("schedule_array");
+				int blobLength = (int)blob.length();
+				byte[] blobBytes = blob.getBytes(1, blobLength);
+				blob.free();
+				
+				ByteArrayInputStream bis = new ByteArrayInputStream(blobBytes);
+				ObjectInput in = null;
+				
+				in = new ObjectInputStream(bis);
+				
+				deserializedSchedule = (Schedule[]) in.readObject();
+			}
+		} catch (Exception e) {
+			System.out.println("Deserializing error");
+			System.out.println(e);
+		}
+
+		 return deserializedSchedule;
+	}
 
 	/**
 	 * Placeholder for checkUsername method
@@ -229,35 +262,7 @@ public class DatabaseConnector {
 		return -1;
 	}
 
-	/**
-	 * Deserialize method goes here
-	 */
-	public Schedule[] deserialize(int userID) {
-		Schedule[] deserializedSchedule = new Schedule[7];
-		
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select schedule_array from schedules where userID = " + userID + ";"); 
-			while(rs.next()) {
-				Blob blob = rs.getBlob("schedule_array");
-				int blobLength = (int)blob.length();
-				byte[] blobBytes = blob.getBytes(1, blobLength);
-				blob.free();
-				
-				ByteArrayInputStream bis = new ByteArrayInputStream(blobBytes);
-				ObjectInput in = null;
-				
-				in = new ObjectInputStream(bis);
-				
-				deserializedSchedule = (Schedule[]) in.readObject();
-			}
-		} catch (Exception e) {
-			System.out.println("Deserializing error");
-			System.out.println(e);
-		}
-
-		 return deserializedSchedule;
-	}
+	
 }
 
 	

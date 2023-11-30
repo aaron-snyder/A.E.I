@@ -163,6 +163,7 @@ public class LoginPage extends Page {
 
             // Obtain button pressed in form of string.
             String action = e.getActionCommand();
+			
             // Switch to catch which button was pressed and perform appropriate functions.
             switch  (action) {
                 case "Create Account":

@@ -41,7 +41,6 @@ public class HomePage extends Page {
 
 
 		for (int i = 0; i <= 2445; i += 15) {
-			System.out.println("time=" + i + ", task=" + schedule[1].schedule.get(i).toString());
 
 			String check = Integer.toString(i);
             if (check.contains("45")) {
@@ -70,9 +69,9 @@ public class HomePage extends Page {
 		frmHomePage.getContentPane().setLayout(null);
 		
 		/*
-		 * creating the label that shows the date
+		 * creating the label that shows the date Todo
 		 */
-		JLabel lblLogin = new JLabel("Date");
+		JLabel lblLogin = new JLabel("Monday");
 		lblLogin.setBounds(29, 10, 105, 35);
 		lblLogin.setForeground(new Color(0, 0, 0));
 		lblLogin.setBackground(new Color(192, 192, 192));
@@ -124,7 +123,7 @@ public class HomePage extends Page {
 	 * getFormattedTaskList method takes in index for day and formats that days schedule appropriately
 	 */
 	public ArrayList<String> getFormattedTaskList(int day) {
-		System.out.println("In getFormattedTaskList (" + day + ")");
+
 		ArrayList<String> returnList = new ArrayList<>();
 		Task position = new Task();
 		Task currentTask = new Task();
@@ -132,7 +131,6 @@ public class HomePage extends Page {
 			//System.out.println("In for loop Time = " + time);
 			position = currentSchedule[day].getTaskAt(time);
 			if (!position.sameTask(currentTask) && position.notNull()) {
-				System.out.println("Return list adding: " + position.toString());
 				returnList.add(position.toString());
 			}
 			currentTask = position;
@@ -142,13 +140,7 @@ public class HomePage extends Page {
 				time += 40;
 			}
 		}
-
-		System.out.println("Exited for loop");
 		
-		for (String s : returnList) {
-			System.out.print("in formattedTaskList loop ");
-			System.out.println(s);
-		}
 		return returnList;
 	}
 
@@ -157,10 +149,9 @@ public class HomePage extends Page {
 	 */
 	public void fillTask() {
 
-		System.out.println("Entered fillTask()");
-
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		JScrollPane tasksPanel = new JScrollPane();
+
 		// Determine the day of the week to display schedule for current day
 		LocalDate today = LocalDate.now();
 		DayOfWeek day = today.getDayOfWeek();
@@ -180,6 +171,7 @@ public class HomePage extends Page {
 				break;
 		
 			case WEDNESDAY:
+				
 				test = getFormattedTaskList(3);
 				break;
 
@@ -196,15 +188,12 @@ public class HomePage extends Page {
 				break;
 
 			default:
-				System.out.println("Default case reached in fillTask()");
 				break;
 		}
 
 		for (String s : test) {
-			System.out.println(s);
 			listModel.addElement(s);
 		}
-		listModel.addElement("Test");
 
 		taskList = new JList<>(listModel);
 		taskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -228,7 +217,7 @@ public class HomePage extends Page {
 	 * Method save, updates database with users current schedule info
 	 */
 	public void save() {
-
+		connector.storeSchedule(currentUserID, currentSchedule);
 	}
 
 	/**

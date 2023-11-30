@@ -148,9 +148,6 @@ public class CreateAccount extends Page {
             if (checkNewAccount(usernameTextField.getText(), passwordField.getPassword(), passwordConfirmField.getPassword())) {
                 connector.createUser(usernameTextField.getText(), new String(passwordField.getPassword()));
 
-				// Prints that the account was created
-                System.out.println("Account Created");
-
 				// Opens teh login page frame
                 LoginPage LoginPageFrame = new LoginPage();
                 LoginPageFrame.setVisible(true);

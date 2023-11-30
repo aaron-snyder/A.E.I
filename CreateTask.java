@@ -366,18 +366,7 @@ public class CreateTask {
 					if (checkTask(newTask)) {
 						for (int index = 0; index <= 6; index++) {
 							if (newTask.getDays()[index] && currentSchedule[index].checkTime(newTask.getStart(), newTask.getEnd())) {
-								System.out.println("Adding task: " + newTask.getName() + " At: " + newTask.getStart());
 								currentSchedule[index].addTask(newTask);
-
-
-								/* 
-								for (Schedule s : currentSchedule) {
-									for (int i : s.schedule.keySet()) {
-										System.out.println("Key = " + i + " Value = " + s.schedule.get(i));
-									}
-								}*/
-
-
 							}
 						}
 						displayNewTaskSuccessMessage();

@@ -145,8 +145,8 @@ public class Task implements Serializable {
     // toString() method
     public String toString(){
         String startMinString = (startMin == 0 ? "00" : "" + startMin);
-        String endMinString = (endMin == 0 ? "00" : "" + startMin);
+        String endMinString = (endMin == 0 ? "00" : "" + endMin);
         
-        return name + " from " + startHour + ":" + startMinString + " to " + endHour + ":" + endMinString;
+        return name + " from " + startHour + ":" + startMinString + amPmStart + " to " + endHour + ":" + endMinString + amPmEnd;
     }
 }

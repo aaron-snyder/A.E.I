@@ -27,13 +27,11 @@ public class Schedule implements Serializable {
             int key = entry.getKey();
             if (key >= start && key <= end) {
                 if (entry.getValue().notNull()){
-                    System.out.println(entry.getValue());
                     return false;
                 }
             }
         }
         return true;
-
     }
 
     /**
@@ -41,15 +39,12 @@ public class Schedule implements Serializable {
      */
     public void addTask(Task task) {
 
-        System.out.println("addTask(" + task.getName() + "), start=" + task.getStart() + ", end=" + task.getEnd());
-
         for (int i = task.getStart(); i <= task.getEnd(); i += 15) {
             schedule.put(i, task);
             String check = Integer.toString(i);
 			if (check.contains("45")) {
 				i += 40;
 			}
-            System.out.println("Task: " + task.getName() + " Start: " + task.getStart() + " End: " + task.getEnd());
         }
     }
 
