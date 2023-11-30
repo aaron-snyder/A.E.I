@@ -1,6 +1,7 @@
-package aei_database;
-
 import java.sql.*;
+
+import javax.sql.rowset.serial.SerialException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,14 +12,16 @@ public class DatabaseConnector {
 	 * The URL implies we call the database aei_database
 	 */
 	String url = "jdbc:mysql://localhost:3306/aei_database";
-	String user = "";
-	String password = "";
+	String user = "root";
+	String password = "CS380Project";
+	int newID;
 	
 	public String userName, pass;
 	
 	//test variables for userID and idSchedule
 	int userID = 1;
 	int idSched = 1;
+	Schedule[] userSchedule = new Schedule[7];
 	
 	Connection conn = null;
 	/**
@@ -26,17 +29,18 @@ public class DatabaseConnector {
 	 * @param u The user name of one of the designers
 	 * @param p The password of one of the designers
 	 */
-	public void Connector(String u, String p) {
-		user = u;
-		password = p;
+	public DatabaseConnector() {
+		
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password);
 			if(conn!=null) {
 				System.out.println("Connected Successfully");
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println("Connection Error");
 		}
+		
 	}
 	
 	/**
@@ -46,14 +50,59 @@ public class DatabaseConnector {
 	 * @param ps new users password
 	 */
 	public void createUser(String uN, String ps) {
-		String insertSQL = "INSERT into users(userName, password, userID)" + "values (" + uN + ", " + ps + ", " + userID++;
+
+		for (int i = 0; i <= 6; i++) {
+			userSchedule[i] = new Schedule();
+		}
+
+		String getIdSQL = "SELECT MAX(userID) as highestUser FROM users";
 		try {
 			Statement st = conn.createStatement();
-			st.executeQuery(insertSQL);
+			ResultSet rs = st.executeQuery(getIdSQL);
+			
+			while (rs.next()) {
+				newID = rs.getInt("highestUser");
+				newID++;
+			}
 		}catch(Exception e) {
-			System.out.println("Connection not found");
+			System.out.println("Could not get max");
+			System.out.println(e);
 		}
+
+
+		String insertSQL = "INSERT INTO users(userName, password, userID) VALUES ('" + uN + "', '" + ps + "', '" + newID + "');";
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate(insertSQL);
+			System.out.println("Created user");
+		}catch(Exception e) {
+			System.out.println("Could not create user");
+			System.out.println(e);
+		}
+
+		try {
+			conn = DriverManager.getConnection(url, user, password);
+			Blob blob = conn.createBlob();
+			blob.setBytes(1, serialize(userSchedule));
+
+			String blobSQL = "INSERT INTO schedules(scheduleID, schedule_array, userID)VALUES(?,?,?);";
+         
+			PreparedStatement preparedStatement = conn.prepareStatement(blobSQL);
+			preparedStatement.setInt(1, newID);
+			preparedStatement.setBlob(2, blob);
+			preparedStatement.setInt(3, newID);
+         
+         preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Blob connection error");
+			System.out.println(e);
+		}
+
+		
+
 	}
+
+	
 	/**
 	 * Prints out the user names of the users and the ID associated with that user name
 	 */
@@ -76,10 +125,19 @@ public class DatabaseConnector {
 	 * @param sch The schedule object to be serialized
 	 * @param schName The name of the schedule(a day between sunday and saturday)
 	 */
-	public void serialize(Schedule sch, String schName) {
-		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newBufferedReader(Paths.get(schName)))){
-			oos.writeObject(sch);
-		}
+	public static byte[] serialize(Schedule[] sch) {
+
+		try {
+			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream objectOut = new ObjectOutputStream(byteOut);
+
+            objectOut.writeObject(sch);
+            return byteOut.toByteArray();
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
 	}
 	
 	/**
@@ -91,7 +149,7 @@ public class DatabaseConnector {
 	 */
 	
 	public void storeSchedule(int userID, int schedID, File fileName) {
-		String insertSQL = "INSERT into schedule(idschedules, userID, schedule)" + "values (" + schedID++ + ", " + userID + ", " + fileName;
+		String insertSQL = "INSERT into schedules(idschedules, schedule_array, userID)" + "values (" + schedID++ + ", " + fileName + ", " + userID;
 		try {
 			Statement st = conn.createStatement();
 			st.executeQuery(insertSQL);
@@ -101,6 +159,105 @@ public class DatabaseConnector {
 	}
 	
 
-	
+	/**
+	 * Placeholder for checkUsername method
+	 */
+	public boolean checkUsername(String username){
+		
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select userName from users");
+			while(rs.next()){
+				String userN = rs.getString("userName");
+				if(userN.equals(username)){
+					//print statement for user already exists
+					System.out.println("username exists");
+					return false;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("check username error");
+			e.printStackTrace();
+		}
+		
+		System.out.println("username do not exist");
+		return true;
+	}
+
+	/**
+	 * Placeholder for checkLogin method
+	 */
+	public boolean checkLogin(String username, String password) {
+		
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select userName,password from users");
+			while(rs.next()){
+				String userN = rs.getString("userName");
+				String pass = rs.getString("password");
+				if(userN.equals(username) && pass.equals(password)){
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("check login error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Placeholder getCurrentUserID method, returns user ID associated with passed username and password
+	 */
+	public int getUserID(String username, String password) {
+		
+		try{
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select * from users");
+			while(rs.next()){
+				String userN = rs.getString("userName");
+				String pass = rs.getString("password");
+				int curUserID = rs.getInt("userID");
+				if(userN.equals(username) && pass.equals(password)){
+					return curUserID;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("get user id error");
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+	/**
+	 * Deserialize method goes here
+	 */
+	public Schedule[] deserialize(int userID) {
+		Schedule[] deserializedSchedule = new Schedule[7];
+		
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select schedule_array from schedules where userID = " + userID + ";"); 
+			while(rs.next()) {
+				Blob blob = rs.getBlob("schedule_array");
+				int blobLength = (int)blob.length();
+				byte[] blobBytes = blob.getBytes(1, blobLength);
+				blob.free();
+				
+				ByteArrayInputStream bis = new ByteArrayInputStream(blobBytes);
+				ObjectInput in = null;
+				
+				in = new ObjectInputStream(bis);
+				
+				deserializedSchedule = (Schedule[]) in.readObject();
+			}
+		} catch (Exception e) {
+			System.out.println("Deserializing error");
+			System.out.println(e);
+		}
+
+		 return deserializedSchedule;
+	}
 }
+
 	

@@ -1,44 +1,23 @@
-import java.awt.EventQueue;
-
-
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
 import java.awt.Panel;
 
+public class CreateAccount extends Page {
 
-
-public class CreateAccount {
-
+	// global varibles for the create account page
 	private JFrame frmCreateAccount;
 	private JPasswordField passwordConfirmField;
-	private JTextField UserNameField;
-	private JTextField passwordField;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CreateAccount window = new CreateAccount();
-					window.frmCreateAccount.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField usernameTextField;
+	private JPasswordField passwordField;
 
 
 	/**
@@ -52,6 +31,9 @@ public class CreateAccount {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		/*
+		 * creating the main frame for the create account page
+		 */
 		frmCreateAccount = new JFrame();
 		frmCreateAccount.getContentPane().setBackground(new Color(192, 192, 192));
 		frmCreateAccount.setBackground(new Color(192, 192, 192));
@@ -60,14 +42,21 @@ public class CreateAccount {
 		frmCreateAccount.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCreateAccount.getContentPane().setLayout(null);
 		
+		/*
+		 * creating the password and username fields
+		 */
 		passwordConfirmField = new JPasswordField();
 		passwordConfirmField.setBounds(182, 159, 130, 20);
 		frmCreateAccount.getContentPane().add(passwordConfirmField);
 		
-		UserNameField = new JTextField();
-		UserNameField.setBounds(182, 88, 130, 20);
-		frmCreateAccount.getContentPane().add(UserNameField);
-		UserNameField.setColumns(10);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(182, 129, 130, 20);
+		frmCreateAccount.getContentPane().add(passwordField);
+		
+		usernameTextField = new JTextField();
+		usernameTextField.setBounds(182, 88, 130, 20);
+		frmCreateAccount.getContentPane().add(usernameTextField);
+		usernameTextField.setColumns(10);
 		
 		Panel panel = new Panel();
 		panel.setBackground(new Color(128, 128, 128));
@@ -75,12 +64,18 @@ public class CreateAccount {
 		frmCreateAccount.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		/*
+		 * creating lable to show team name
+		 */
 		JLabel lblAei = new JLabel("A.E.I");
 		lblAei.setBounds(10, 22, 60, 20);
 		lblAei.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAei.setFont(new Font("Tempus Sans ITC", Font.BOLD, 14));
 		panel.add(lblAei);
 		
+		/*
+		 * creating labels
+		 */
 		JLabel lblCreateAccount = new JLabel("Create Account");
 		lblCreateAccount.setForeground(new Color(0, 0, 0));
 		lblCreateAccount.setBackground(new Color(192, 192, 192));
@@ -101,29 +96,68 @@ public class CreateAccount {
 		lblPassword.setBounds(63, 133, 109, 16);
 		frmCreateAccount.getContentPane().add(lblPassword);
 		
-		/*
-		 * Sign up button to send user to a sign up page.
-		 * The user will be taken to the "sign up" panel
-		 */
-		JButton createAccountBtn = new JButton("Create Account");
-		createAccountBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		createAccountBtn.setBounds(122, 205, 130, 25);
-		frmCreateAccount.getContentPane().add(createAccountBtn);
-		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
 		lblConfirmPassword.setHorizontalAlignment(SwingConstants.LEFT);
 		lblConfirmPassword.setFont(new Font("Yu Gothic Medium", Font.PLAIN, 12));
 		lblConfirmPassword.setBounds(56, 163, 116, 16);
 		frmCreateAccount.getContentPane().add(lblConfirmPassword);
 		
-		passwordField = new JTextField();
-		passwordField.setColumns(10);
-		passwordField.setBounds(182, 129, 130, 20);
-		frmCreateAccount.getContentPane().add(passwordField);
+		/*
+		 * Sign up button to create the users account
+		 * this button should also check the user info and
+		 * make sure that there isnt already a user with the username
+		 * 
+		 * This also takes the user back to the login page
+		 */
+		JButton createAccountBtn = new JButton("Create Account");
+		createAccountBtn.addActionListener(signupPage);
+		createAccountBtn.setBounds(122, 205, 130, 25);
+		frmCreateAccount.getContentPane().add(createAccountBtn);
 		
-
 	}
+	
+	/*
+	 * sets the visiblity of the createAccount page
+	 */
+    public void setVisible(boolean visible) {
+        frmCreateAccount.setVisible(visible);
+    }
+
+	/**
+	 * Method checkNewAccount returns true if username doesn't exist AND passwords match
+	 */
+	public boolean checkNewAccount(String username, char[] password1, char[] password2) {
+		return connector.checkUsername(username) && new String(passwordField.getPassword()).equals(new String(passwordConfirmField.getPassword()));
+	}
+
+	/**
+	 * Method to inform user that something went wrong with their sign up attempt
+	 */
+	public void displaySignupErrorMessage(){
+		JOptionPane.showMessageDialog(frmCreateAccount, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+     * Listener for signup page.
+     */
+    ActionListener signupPage = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            // Only action to perform is Create Account button, so attempt to create account.
+            if (checkNewAccount(usernameTextField.getText(), passwordField.getPassword(), passwordConfirmField.getPassword())) {
+                connector.createUser(usernameTextField.getText(), new String(passwordField.getPassword()));
+
+				// Prints that the account was created
+                System.out.println("Account Created");
+
+				// Opens teh login page frame
+                LoginPage LoginPageFrame = new LoginPage();
+                LoginPageFrame.setVisible(true);
+                frmCreateAccount.dispose();
+            } else {
+                displaySignupErrorMessage();
+            }                
+        }
+    };
 }
