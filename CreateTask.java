@@ -59,12 +59,17 @@ public class CreateTask {
 	private final JLabel lblEnd = new JLabel("End:");
 	
 
+	/**
+	 * Default constructor
+	 */
+	public CreateTask(){}
 
 	public CreateTask(int userID, Schedule[] schedule) {
 		currentUserID = userID;
 		currentSchedule = schedule;
 		initialize();
 	}
+
 
 	/**
 	 * Initialize the contents of the frame.
@@ -254,20 +259,24 @@ public class CreateTask {
 		btnBack.addActionListener(addTaskPage);
 	}
 
-    /*
+
+    /**
      * sets the visibilty of the create task frame
      */
     public void setVisible(boolean visible) {
         frmCreateTask.setVisible(visible);
     }
 
+
 	public void displayNewTaskSuccessMessage() {
 		JOptionPane.showMessageDialog(frmCreateTask, "Task created successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
 	}
 
+
 	public void displayNewTaskErrorMessage() {
 		JOptionPane.showMessageDialog(frmCreateTask, "You already have tasks in that time slot!", "Error", JOptionPane.ERROR_MESSAGE);
 	}
+
 
 	/**
 	 * Method to display Home Page again
@@ -277,6 +286,7 @@ public class CreateTask {
         homePage.setVisible(true);
         frmCreateTask.dispose();
 	}
+
 
 	/**
 	 * Method to check if the task is valid with weeks schedule
@@ -289,6 +299,7 @@ public class CreateTask {
 		}
 		return true;
     }
+
 
 	/**
      * Listener for addTask page.

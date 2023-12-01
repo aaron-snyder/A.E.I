@@ -42,6 +42,7 @@ public class DatabaseConnector {
 		
 	}
 	
+	
 	/**
 	 * Method that inserts new users information into the database.
 	 * Assumes their is a table called users in the database
@@ -97,6 +98,7 @@ public class DatabaseConnector {
 		}
 	}
 
+
 	/**
 	 * Prints out the user names of the users and the ID associated with that user name
 	 */
@@ -113,6 +115,8 @@ public class DatabaseConnector {
 			System.out.println("Connection not found");
 		}
 	}
+	
+
 	/**
 	 * A method to serialize a schedule object to prepare for storage in the database.
 	 * Note: class will produce errors until Schedule class is implemented and the class implements the serialize interface
@@ -134,6 +138,7 @@ public class DatabaseConnector {
         }
 	}
 	
+
 	/**
 	 * A method that stores a schedule object into the schedule table in the database
 	 * Note: Will continue to produce errors until schedule class is implemented
@@ -141,7 +146,6 @@ public class DatabaseConnector {
 	 * @param schedID The id of the schedule 
 	 * @param fileName the file with the serialized object
 	 */
-
 	public void storeSchedule(int userID, Schedule[] schedule) {
 
 		try {
@@ -161,6 +165,7 @@ public class DatabaseConnector {
 			System.out.println(e);
 		}
 	}
+
 
 	/**
 	 * Deserialize method goes here
@@ -192,6 +197,7 @@ public class DatabaseConnector {
 		 return deserializedSchedule;
 	}
 
+
 	/**
 	 * Placeholder for checkUsername method
 	 */
@@ -217,6 +223,7 @@ public class DatabaseConnector {
 		return true;
 	}
 
+
 	/**
 	 * Placeholder for checkLogin method
 	 */
@@ -238,6 +245,7 @@ public class DatabaseConnector {
 		}
 		return false;
 	}
+
 
 	/**
 	 * Placeholder getCurrentUserID method, returns user ID associated with passed username and password
@@ -261,8 +269,6 @@ public class DatabaseConnector {
 		}
 		return -1;
 	}
-
-	
 }
 
 	

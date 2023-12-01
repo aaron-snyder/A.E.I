@@ -21,15 +21,13 @@ public class LoginPage extends Page {
 	private JPasswordField passwordField;
 	private JTextField usernameField;
 
-
-
-
 	/**
 	 * Create the application.
 	 */
 	public LoginPage() {
 		initialize();
 	}
+
 
 	/**
 	 * Initialize the contents of the frame.
@@ -118,12 +116,14 @@ public class LoginPage extends Page {
 		
 	}
 	
+
 	/*
 	 * method to make set the visibility of the LoginPage panel
 	 */
     public void setVisible(boolean visible) {
     	frmLoginPage.setVisible(visible);
     }
+
 
 	/**
 	 * Method openCreateAccountPage, switches active page to create account page
@@ -136,6 +136,7 @@ public class LoginPage extends Page {
         frmLoginPage.dispose();
 	}
 
+
 	/**
 	 * Method openCreateAccountPage, switches active page to create account page
 	 */
@@ -147,6 +148,7 @@ public class LoginPage extends Page {
             frmLoginPage.dispose();
 	}
 
+
 	/**
 	 * Method to display error message informing user something went wrong with their login request
 	 */
@@ -154,6 +156,7 @@ public class LoginPage extends Page {
 		JOptionPane.showMessageDialog(frmLoginPage, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
+	
 	/**
      * Listener for login page.
      */
@@ -180,6 +183,4 @@ public class LoginPage extends Page {
             }
         }
     };
-
-	
 }

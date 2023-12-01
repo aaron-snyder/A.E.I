@@ -20,6 +20,7 @@ public class Task implements Serializable {
      */
     public Task(){}
 
+
     /**
      * Constructor that takes in parameters to completely fill a valid task
      */
@@ -35,12 +36,14 @@ public class Task implements Serializable {
         this.notNull = true;
     }
 
+
     /**
      * Equals method **************** Todo
      */
     public boolean sameTask(Task task) {
         return this.name.equals(task.getName());
     }
+
 
     /**
      * Method notNull returns true if the task is an actual task, or false if it's a placeholder
@@ -49,7 +52,11 @@ public class Task implements Serializable {
         return notNull;
     }
     
-    // Setter for null
+
+    /**
+     * Setter for null
+     * @param isNull
+     */
     public void setNull(boolean isNull){
         if (isNull) {
             notNull = false;
@@ -58,37 +65,65 @@ public class Task implements Serializable {
         }
     }
 
-    // Getter for name
+
+    /**
+     * Getter for name
+     * @return name of task
+     */
     public String getName(){
         return name;
     }
 
-    // Setter for name
+
+    /**
+     * Setter for name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
-    // Getter for amPmStart
+
+    /**
+     * Getter for amPmStart
+     * @return start amPm 
+     */
     public String getAmPmStart() {
         return amPmStart;
     }
 
-    // Setter for amPmStart
+
+    /**
+     * Setter for amPmStart
+     * @param amPmStart
+     */
     public void setAmPmStart(String amPmStart) {
         this.amPmStart = amPmStart;
     }
 
-    // Getter for amPmEnd
+
+    /**
+     * Getter for amPmEnd
+     * @return end amPm
+     */
     public String getAmPmEnd() {
         return amPmEnd;
     }
 
-    // Setter for amPmEnd
+
+    /**
+     * Setter for amPmEnd
+     * @param amPmEnd
+     */
     public void setAmPmEnd(String amPmEnd) {
         this.amPmEnd = amPmEnd;
     }
 
-    // Getter for startTime, returns formatted start time (10:30 is 1030, 5:40 is 1740 etc...)
+
+    /**
+     * Getter for startTime, returns formatted start time (10:30 is 1030, 5:40 is 1740 etc...)
+     * @return formatted startTime
+     */
     public int getStart() {
 
         int time = startHour * 100 + startMin;
@@ -100,17 +135,29 @@ public class Task implements Serializable {
         return time;
     }
 
-    // Setter for startHour
+
+    /**
+     * Setter for startHour
+     * @param startHour
+     */
     public void setStartHour(int startHour) {
         this.startHour = startHour;
     }
 
-    // Setter for startMin
+
+    /**
+     * Setter for startMin
+     * @param startMin
+     */
     public void setStartMin(int startMin) {
         this.startMin = startMin;
     }
 
-    // Getter for endTime, returns formatted end time (10:30 is 1030, 5:40 is 1740 etc...)
+
+    /**
+     * Getter for endTime, returns formatted end time (10:30 is 1030, 5:40 is 1740 etc...)
+     * @return formatted endTime
+     */
     public int getEnd() {
 
         int time = endHour * 100 + endMin;
@@ -122,27 +169,46 @@ public class Task implements Serializable {
         return time;
     }
 
-    // Setter for startHour
+
+    /**
+     * Setter for startHour
+     * @param endHour
+     */
     public void setEndHour(int endHour) {
         this.endHour = endHour;
     }
 
-    // Setter for startMin
+
+    /**
+     * Setter for startMin
+     * @param endMin
+     */
     public void setEndMin(int endMin) {
         this.endMin = endMin;
     }
 
-    // Getter for days
+
+    /**
+     * Getter for days
+     * @return array of what days the task occurs on
+     */
     public boolean[] getDays() {
         return days;
     }
 
-    // Setter for days
+
+    /**
+     * Setter for days
+     * @param days
+     */
     public void setDays(boolean[] days) {
         this.days = days;
     }
 
-    // toString() method
+
+    /**
+     * toString() method
+     */
     public String toString(){
         String startMinString = (startMin == 0 ? "00" : "" + startMin);
         String endMinString = (endMin == 0 ? "00" : "" + endMin);

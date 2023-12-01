@@ -27,12 +27,18 @@ public class HomePage extends Page {
 	private int currentUserID;
 	private Schedule[] currentSchedule = new Schedule[7];
 
+
 	/*
 	 * global variables that are used
 	 */
 	private JFrame frmHomePage;
     private JList<String> taskList;
 	
+	/**
+	 * Defaulty constructor
+	 */
+	public HomePage(){}
+
 	/**
 	 * Homepage constructor for userID and schedule passed
 	 */
@@ -52,6 +58,7 @@ public class HomePage extends Page {
 		currentSchedule = schedule;
 		initialize();
 	}
+
 
 	/**
 	 * Initialize the contents of the frame.
@@ -111,6 +118,7 @@ public class HomePage extends Page {
 		fillTask();
 	}
 	 
+
 	/*
 	 * sets the homepage visibility to show the page
 	 */
@@ -118,6 +126,7 @@ public class HomePage extends Page {
     	frmHomePage.setVisible(visible);
 
     }
+
 
 	/**
 	 * getFormattedTaskList method takes in index for day and formats that days schedule appropriately
@@ -143,6 +152,7 @@ public class HomePage extends Page {
 		
 		return returnList;
 	}
+
 
 	/**
 	 * Method fillTask fills taskList with users tasks
@@ -204,6 +214,7 @@ public class HomePage extends Page {
 
 	}
 
+
 	/**
 	 * Method displayAddTaskPage opens the AddTask page
 	 */
@@ -213,12 +224,14 @@ public class HomePage extends Page {
         frmHomePage.dispose();
 	}
 
+
 	/**
 	 * Method save, updates database with users current schedule info
 	 */
 	public void save() {
 		connector.storeSchedule(currentUserID, currentSchedule);
 	}
+
 
 	/**
 	 * Method closeProgram, saves users info and closes the program
@@ -229,6 +242,7 @@ public class HomePage extends Page {
         LoginPageFrame.setVisible(true);
         frmHomePage.dispose();
 	}
+
 
 	/**
      * Listener for home page.

@@ -5,6 +5,10 @@ public class Schedule implements Serializable {
 
     public HashMap<Integer, Task> schedule = new HashMap<>();
 
+
+    /**
+     * Default constructor
+     */
     public Schedule() {
         // Null task to fill default schedule with
         Task nullTask = new Task();
@@ -18,6 +22,7 @@ public class Schedule implements Serializable {
             }
         }
     }
+
 
     /**
      * Method checkTime takes in two times start and end, and checks if the schedule is free between those two times
@@ -34,6 +39,7 @@ public class Schedule implements Serializable {
         return true;
     }
 
+
     /**
      * Method addTask takes in three parameters, start, end and task, fills schedule between start and end with task
      */
@@ -48,6 +54,7 @@ public class Schedule implements Serializable {
         }
     }
 
+    
     // Getter for a specific index in the schedule
     public Task getTaskAt(int index) {
         return schedule.get(index);

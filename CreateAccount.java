@@ -27,6 +27,7 @@ public class CreateAccount extends Page {
 		initialize();
 	}
 
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -116,12 +117,14 @@ public class CreateAccount extends Page {
 		
 	}
 	
-	/*
+
+	/**
 	 * sets the visiblity of the createAccount page
 	 */
     public void setVisible(boolean visible) {
         frmCreateAccount.setVisible(visible);
     }
+
 
 	/**
 	 * Method checkNewAccount returns true if username doesn't exist AND passwords match
@@ -130,12 +133,14 @@ public class CreateAccount extends Page {
 		return connector.checkUsername(username) && new String(passwordField.getPassword()).equals(new String(passwordConfirmField.getPassword()));
 	}
 
+
 	/**
 	 * Method to inform user that something went wrong with their sign up attempt
 	 */
 	public void displaySignupErrorMessage(){
 		JOptionPane.showMessageDialog(frmCreateAccount, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
+
 
 	/**
      * Listener for signup page.
